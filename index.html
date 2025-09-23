@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SGPA Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SGPA Calculator</h1>
+        <div class="calculator">
+            <div class="input-section">
+                <h2>Enter Your Details</h2>
+                <div class="user-details" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
+                    <input type="text" id="student-name" class="student-name" placeholder="Your Name" style="padding: 12px; border-radius: 8px; border: 2px solid #e1e5e9; font-size: 14px; min-width: 180px;">
+                    <input type="text" id="student-usn" class="student-usn" placeholder="USN" style="padding: 12px; border-radius: 8px; border: 2px solid #e1e5e9; font-size: 14px; min-width: 120px;">
+                </div>
+                <div id="subjects-container">
+                    <div class="subject-row">
+                        <input type="text" class="subject-name" placeholder="Subject Name">
+                        <select class="grade-select">
+                            <option value="">Select Grade</option>
+                            <option value="10">A+ (10)</option>
+                            <option value="9">A (9)</option>
+                            <option value="8">B+ (8)</option>
+                            <option value="7">B (7)</option>
+                            <option value="6">C+ (6)</option>
+                            <option value="5">C (5)</option>
+                            <option value="4">D (4)</option>
+                            <option value="0">F (0)</option>
+                        </select>
+                        <input type="number" class="credits" placeholder="Credits" min="1" max="10">
+                        <button type="button" class="remove-subject">Remove</button>
+                    </div>
+                </div>
+                <button type="button" id="add-subject">Add Subject</button>
+                <button type="button" id="calculate-cgpa">Calculate CGPA</button>
+                <button type="button" id="clear-all">Clear All</button>
+            </div>
+            
+            <div class="result-section">
+                <h2>Results</h2>
+                <div class="result-card">
+                    <div class="result-item">
+                        <span class="label">Total Credits:</span>
+                        <span id="total-credits">0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Total Grade Points:</span>
+                        <span id="total-points">0</span>
+                    </div>
+                    <div class="result-item cgpa-result">
+                        <span class="label">SGPA:</span>
+                        <span id="cgpa-value">0.00</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="label">Percentage:</span>
+                        <span id="percentage-value">0.00%</span>
+                    </div>
+                </div>
+                
+                <div class="grade-table">
+                    <h3>Subject Details</h3>
+                    <table id="grade-table">
+                        <thead>
+                            <tr>
+                                <th>Subject</th>
+                                <th>Grade</th>
+                                <th>Credits</th>
+                                <th>Grade Points</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grade-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>

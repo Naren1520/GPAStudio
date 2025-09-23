@@ -1,0 +1,402 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #ca5eb8 0%, #ed345c 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+h1 {
+    text-align: center;
+    padding: 30px;
+    background: linear-gradient(135deg, #e3b914 0%, #d02d17 100%);
+    color: white;
+    font-size: 2.5rem;
+    margin: 0;
+}
+
+.calculator {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    padding: 30px;
+}
+
+.input-section, .result-section {
+    background: #f8f9fa;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.subject-row {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.subject-name, .grade-select, .credits {
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: border-color 0.3s ease;
+}
+
+.subject-name:focus, .grade-select:focus, .credits:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.remove-subject {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.remove-subject:hover {
+    background: #c0392b;
+}
+
+#add-subject, #calculate-cgpa, #clear-all {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 5px;
+    transition: all 0.3s ease;
+}
+
+#add-subject:hover, #calculate-cgpa:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+#clear-all {
+    background: #e74c3c;
+}
+
+#clear-all:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+}
+
+.result-card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 25px;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.result-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.cgpa-result {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #667eea;
+    border: 2px solid #667eea;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.label {
+    font-weight: 600;
+    color: #555;
+}
+
+#cgpa-value {
+    font-size: 2rem;
+    color: #667eea;
+}
+
+.grade-table {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.grade-table h3 {
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #67d51e;
+    color: white;
+    font-weight: 600;
+    border-radius: 1px;
+}
+
+tr:hover {
+    background: #f8f9fa;
+}
+
+/* Responsive Design */
+/* User Details Styles */
+.user-details {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.student-name, .student-usn {
+    padding: 12px;
+    border-radius: 8px;
+    border: 2px solid #e1e5e9;
+    font-size: 14px;
+    min-width: 120px;
+}
+.student-name {
+    min-width: 180px;
+}
+@media (max-width: 768px) {
+    .calculator {
+        grid-template-columns: 1fr;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .subject-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        padding: 20px;
+    }
+    
+    .container {
+        margin: 10px auto;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .input-section, .result-section {
+        padding: 15px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .result-card, .grade-table {
+        padding: 10px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #add-subject, #calculate-cgpa, #clear-all {
+        width: 100%;
+        margin: 8px 0;
+        font-size: 1rem;
+        padding: 12px 0;
+    }
+    th, td {
+        padding: 8px;
+        font-size: 0.95rem;
+    }
+    table {
+        font-size: 0.95rem;
+    }
+    .cgpa-result {
+        font-size: 1.1rem;
+        padding: 10px;
+    }
+    #cgpa-value {
+        font-size: 1.3rem;
+    }
+    .success-message, .error-message {
+        font-size: 0.95rem;
+        padding: 10px;
+        margin: 10px 0;
+    }
+    .grade-table h3 {
+        font-size: 1.1rem;
+    }
+    .container {
+        box-shadow: none;
+    }
+    .result-card, .grade-table {
+        box-shadow: none;
+    }
+    .subject-name, .grade-select, .credits {
+        font-size: 1rem;
+        padding: 10px;
+    }
+    .remove-subject {
+        font-size: 1rem;
+        padding: 10px 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        margin: 2px auto;
+        border-radius: 8px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    h1 {
+        font-size: 1.2rem;
+        padding: 10px;
+    }
+    .input-section, .result-section {
+        padding: 8px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    .result-card, .grade-table {
+        padding: 5px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    #add-subject, #calculate-cgpa, #clear-all {
+        font-size: 0.95rem;
+        padding: 8px 0;
+    }
+    th, td {
+        padding: 5px;
+        font-size: 0.85rem;
+    }
+    .cgpa-result {
+        font-size: 1rem;
+        padding: 6px;
+    }
+    #cgpa-value {
+        font-size: 1rem;
+    }
+    .success-message, .error-message {
+        font-size: 0.85rem;
+        padding: 6px;
+        margin: 6px 0;
+    }
+    .grade-table h3 {
+        font-size: 1rem;
+    }
+    .subject-name, .grade-select, .credits {
+        font-size: 0.95rem;
+        padding: 8px;
+    }
+    .remove-subject {
+        font-size: 0.95rem;
+        padding: 8px 10px;
+    }
+}
+
+/* Animation for adding subjects */
+.subject-row {
+    animation: slideIn 0.3s ease-in;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Success message styling */
+.success-message {
+    background: #d4edda;
+    color: #155724;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #28a745;
+}
+
+/* Error message styling */
+.error-message {
+    background: #f8d7da;
+    color: #721c24;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    border-left: 4px solid #dc3545;
+}
