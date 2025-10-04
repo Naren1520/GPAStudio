@@ -34,17 +34,141 @@ document.addEventListener('DOMContentLoaded', function() {
         localStorage.setItem('studentName', name);
         localStorage.setItem('studentUsn', usn);
 
-        // Populate both calculator forms
+        // Populate both calculator forms and profile
         document.getElementById('student-name').value = name;
         document.getElementById('student-usn').value = usn;
         document.getElementById('cgpa-student-name').value = name;
         document.getElementById('cgpa-student-usn').value = usn;
+        document.getElementById('profile-name').textContent = name;
+        document.getElementById('profile-usn').textContent = usn;
 
         // Hide overlay with animation
         welcomeOverlay.style.opacity = '0';
         setTimeout(() => {
             welcomeOverlay.classList.add('hidden');
         }, 300);
+    });
+
+    // Profile dropdown functionality
+    const profileBtn = document.getElementById('profile-btn');
+    const profileDropdown = document.getElementById('profile-dropdown');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    // Update profile info
+    function updateProfileInfo() {
+        const name = localStorage.getItem('studentName');
+        const usn = localStorage.getItem('studentUsn');
+        const college = localStorage.getItem('studentCollege');
+        const phone = localStorage.getItem('studentPhone');
+        
+        document.getElementById('profile-name').textContent = name || 'Not set';
+        document.getElementById('profile-usn').textContent = usn || 'Not set';
+        document.getElementById('profile-college').textContent = college || 'Not set';
+        document.getElementById('profile-phone').textContent = phone || 'Not set';
+    }
+
+    // Function to make a field editable
+    function makeEditable(fieldId, labelText, validationFn = null) {
+        const field = document.getElementById(fieldId);
+        const container = field.parentElement;
+        const currentValue = field.textContent;
+        
+        container.classList.add('editing');
+        
+        const input = document.createElement('input');
+        input.value = currentValue !== 'Not set' ? currentValue : '';
+        input.placeholder = `Enter ${labelText}`;
+        
+        const actions = document.createElement('div');
+        actions.className = 'edit-actions';
+        
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'save-btn';
+        saveBtn.textContent = 'Save';
+        
+        const cancelBtn = document.createElement('button');
+        cancelBtn.className = 'cancel-btn';
+        cancelBtn.textContent = 'Cancel';
+        
+        actions.appendChild(saveBtn);
+        actions.appendChild(cancelBtn);
+        
+        container.insertBefore(input, field);
+        container.appendChild(actions);
+        
+        input.focus();
+        
+        saveBtn.addEventListener('click', () => {
+            const newValue = input.value.trim();
+            if (validationFn && !validationFn(newValue)) {
+                return;
+            }
+            localStorage.setItem(`student${labelText.replace(/\s+/g, '')}`, newValue);
+            field.textContent = newValue || 'Not set';
+            resetField();
+        });
+        
+        cancelBtn.addEventListener('click', resetField);
+        
+        function resetField() {
+            container.classList.remove('editing');
+            input.remove();
+            actions.remove();
+        }
+    }
+
+    // Phone number validation
+    function validatePhone(phone) {
+        const phoneRegex = /^\d{10}$/;
+        if (!phoneRegex.test(phone)) {
+            alert('Please enter a valid 10-digit phone number');
+            return false;
+        }
+        return true;
+    }
+
+    // Add event listeners for edit buttons
+    document.getElementById('edit-college').addEventListener('click', () => {
+        makeEditable('profile-college', 'College');
+    });
+
+    document.getElementById('edit-phone').addEventListener('click', () => {
+        makeEditable('profile-phone', 'Phone', validatePhone);
+    });
+
+    // Initial profile update
+    updateProfileInfo();
+
+    // Toggle profile dropdown
+    profileBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!profileDropdown.contains(e.target) && !profileBtn.contains(e.target)) {
+            profileDropdown.classList.remove('active');
+        }
+    });
+
+    // Logout functionality
+    logoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('studentName');
+        localStorage.removeItem('studentUsn');
+        
+        // Clear all forms
+        document.getElementById('student-name').value = '';
+        document.getElementById('student-usn').value = '';
+        document.getElementById('cgpa-student-name').value = '';
+        document.getElementById('cgpa-student-usn').value = '';
+        
+        // Show welcome overlay
+        welcomeOverlay.classList.remove('hidden');
+        welcomeOverlay.style.opacity = '1';
+        
+        // Close dropdown
+        profileDropdown.classList.remove('active');
     });
 
     // Add jsPDF library
@@ -223,6 +347,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function downloadMarksheet(type) {
         const studentName = document.getElementById(type === 'sgpa' ? 'student-name' : 'cgpa-student-name').value.trim();
         const studentUSN = document.getElementById(type === 'sgpa' ? 'student-usn' : 'cgpa-student-usn').value.trim();
+        const college = localStorage.getItem('studentCollege') || 'Not set';
+        const phone = localStorage.getItem('studentPhone') || 'Not set';
 
         if (!studentName || !studentUSN) {
             alert('Please enter your Name and USN before downloading the certificate.');
@@ -240,13 +366,32 @@ document.addEventListener('DOMContentLoaded', function() {
             doc.setFont('helvetica', 'bold');
             doc.text(type === 'sgpa' ? 'SGPA REPORT CARD' : 'CGPA REPORT CARD', 15, 18);
             
+            // Student Details Section Background
+            doc.setFillColor(245, 247, 250);
+            doc.rect(10, 35, 190, 40, 'F');
+            
+            // Student Details Header
+            doc.setFontSize(14);
+            doc.setTextColor(33, 87, 138);
+            doc.text('STUDENT DETAILS', 15, 45);
+            
             // Student Details
             doc.setFontSize(12);
-            doc.text('Name: ' + studentName, 15, 40);
-            doc.text('USN: ' + studentUSN, 15, 50);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Name:', 25, 55);
+            doc.text(studentName, 80, 55);
+            
+            doc.text('USN:', 25, 62);
+            doc.text(studentUSN, 80, 62);
+            
+            doc.text('College:', 25, 69);
+            doc.text(college, 80, 69);
+            
+            doc.text('Phone:', 25, 76);
+            doc.text(phone, 80, 76);
             
             // Table Header
-            let y = 70;
+            let y = 90;  // Adjusted starting position to accommodate student details
             doc.setFillColor(33, 87, 138);
             doc.rect(15, y, 180, 10, 'F');
             doc.setTextColor(255, 255, 255);
