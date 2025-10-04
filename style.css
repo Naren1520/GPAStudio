@@ -693,8 +693,6 @@ tr:hover {
         grid-template-columns: 1fr;
         display: flex;
         flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
     
     .subject-row, .semester-row {
@@ -702,7 +700,6 @@ tr:hover {
         gap: 10px;
         display: flex;
         flex-direction: column;
-        align-items: center;
     }
     
     h1 {
@@ -713,131 +710,161 @@ tr:hover {
     .container {
         margin: 10px auto;
         border-radius: 15px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        box-shadow: none;
     }
+
     .input-section, .result-section {
         padding: 15px;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
+
     .result-card, .grade-table {
         padding: 10px;
         width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
+        box-shadow: none;
     }
-    #add-subject, #calculate-cgpa, #clear-all {
-        width: 100%;
-        margin: 8px 0;
-        font-size: 1rem;
-        padding: 12px 0;
+
+    /* Make all input fields and buttons consistent width */
+    .subject-name, 
+    .grade-select, 
+    .credits,
+    .semester-name,
+    .semester-sgpa,
+    .remove-subject,
+    #add-subject, 
+    #calculate-cgpa, 
+    #clear-all,
+    #add-semester,
+    #calculate-final-cgpa,
+    #clear-all-semesters,
+    #download-marksheet,
+    #download-cgpa-marksheet {
+        width: 100% !important;
+        margin: 5px 0 !important;
+        padding: 12px !important;
+        font-size: 1rem !important;
+        height: auto !important;
+        box-sizing: border-box !important;
     }
+
+    /* Style adjustments for input fields */
+    .subject-name,
+    .grade-select,
+    .credits,
+    .semester-name,
+    .semester-sgpa {
+        border: 2px solid #e1e5e9;
+        border-radius: 8px;
+    }
+
+    /* Remove center alignment from rows */
+    .subject-row > *,
+    .semester-row > * {
+        margin: 0;
+        text-align: left;
+    }
+
+    /* Table styles */
     th, td {
         padding: 8px;
         font-size: 0.95rem;
     }
+
     table {
         font-size: 0.95rem;
+        width: 100%;
     }
+
     .cgpa-result {
         font-size: 1.1rem;
         padding: 10px;
     }
+
     #cgpa-value {
         font-size: 1.3rem;
     }
+
+    /* Messages */
     .success-message, .error-message {
         font-size: 0.95rem;
         padding: 10px;
         margin: 10px 0;
+        width: 100%;
     }
+
     .grade-table h3 {
         font-size: 1.1rem;
     }
-    .container {
-        box-shadow: none;
-    }
-    .result-card, .grade-table {
-        box-shadow: none;
-    }
-    .subject-name, .grade-select, .credits {
-        font-size: 1rem;
-        padding: 10px;
-    }
-    .remove-subject {
-        font-size: 1rem;
-        padding: 10px 12px;
+
+    /* Ensure containers take full width */
+    #subjects-container,
+    #semesters-container {
+        width: 100%;
     }
 }
+
 
 @media (max-width: 480px) {
     .container {
         margin: 2px auto;
         border-radius: 8px;
         padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
+
     h1 {
         font-size: 1.2rem;
         padding: 10px;
     }
+
     .input-section, .result-section {
         padding: 8px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
+
     .result-card, .grade-table {
         padding: 5px;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
     }
-    #add-subject, #calculate-cgpa, #clear-all {
-        font-size: 0.95rem;
-        padding: 8px 0;
+
+    /* Smaller font sizes for mobile */
+    .subject-name, 
+    .grade-select, 
+    .credits,
+    .semester-name,
+    .semester-sgpa,
+    .remove-subject,
+    #add-subject, 
+    #calculate-cgpa, 
+    #clear-all,
+    #add-semester,
+    #calculate-final-cgpa,
+    #clear-all-semesters,
+    #download-marksheet,
+    #download-cgpa-marksheet {
+        font-size: 0.95rem !important;
+        padding: 10px !important;
     }
+
     th, td {
         padding: 5px;
         font-size: 0.85rem;
     }
+
     .cgpa-result {
         font-size: 1rem;
         padding: 6px;
     }
+
     #cgpa-value {
         font-size: 1rem;
     }
+
     .success-message, .error-message {
         font-size: 0.85rem;
         padding: 6px;
         margin: 6px 0;
     }
+
     .grade-table h3 {
         font-size: 1rem;
-    }
-    .subject-name, .grade-select, .credits {
-        font-size: 0.95rem;
-        padding: 8px;
-    }
-    .remove-subject {
-        font-size: 0.95rem;
-        padding: 8px 10px;
     }
 }
 
