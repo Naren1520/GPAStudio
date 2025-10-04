@@ -1,151 +1,370 @@
 // CGPA Calculator JavaScript
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Add Download Marksheet button
-    const downloadBtn = document.createElement('button');
-    downloadBtn.textContent = 'Download Marksheet';
-    downloadBtn.id = 'download-marksheet';
-    downloadBtn.style.background = '#28a745';
-    downloadBtn.style.color = 'white';
-    downloadBtn.style.border = 'none';
-    downloadBtn.style.padding = '15px 25px';
-    downloadBtn.style.borderRadius = '10px';
-    downloadBtn.style.cursor = 'pointer';
-    downloadBtn.style.fontSize = '16px';
-    downloadBtn.style.fontWeight = '600';
-    downloadBtn.style.margin = '10px 5px';
-    const resultSection = document.querySelector('.result-section');
-    resultSection.appendChild(downloadBtn);
+    // Welcome overlay functionality
+    const welcomeOverlay = document.getElementById('welcome-overlay');
+    const welcomeForm = document.querySelector('.welcome-form');
+    const welcomeName = document.getElementById('welcome-name');
+    const welcomeUsn = document.getElementById('welcome-usn');
+    const welcomeSubmit = document.getElementById('welcome-submit');
 
-    // Download as PDF using jsPDF
-    downloadBtn.addEventListener('click', function() {
-        // Get student details
-        const studentName = document.getElementById('student-name').value.trim();
-        const studentUSN = document.getElementById('student-usn').value.trim();
+    // Check if user details exist in localStorage
+    const savedName = localStorage.getItem('studentName');
+    const savedUsn = localStorage.getItem('studentUsn');
+
+    if (savedName && savedUsn) {
+        // If details exist, hide overlay and populate fields
+        welcomeOverlay.classList.add('hidden');
+        document.getElementById('student-name').value = savedName;
+        document.getElementById('student-usn').value = savedUsn;
+        document.getElementById('cgpa-student-name').value = savedName;
+        document.getElementById('cgpa-student-usn').value = savedUsn;
+    }
+
+    welcomeSubmit.addEventListener('click', function() {
+        const name = welcomeName.value.trim();
+        const usn = welcomeUsn.value.trim();
+
+        if (!name || !usn) {
+            alert('Please enter both Name and USN');
+            return;
+        }
+
+        // Save to localStorage
+        localStorage.setItem('studentName', name);
+        localStorage.setItem('studentUsn', usn);
+
+        // Populate both calculator forms
+        document.getElementById('student-name').value = name;
+        document.getElementById('student-usn').value = usn;
+        document.getElementById('cgpa-student-name').value = name;
+        document.getElementById('cgpa-student-usn').value = usn;
+
+        // Hide overlay with animation
+        welcomeOverlay.style.opacity = '0';
+        setTimeout(() => {
+            welcomeOverlay.classList.add('hidden');
+        }, 300);
+    });
+
+    // Add jsPDF library
+    const script = document.createElement('script');
+    script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+    document.head.appendChild(script);
+
+    // Navigation between SGPA and CGPA calculators
+    const sgpaNav = document.getElementById('sgpa-nav');
+    const cgpaNav = document.getElementById('cgpa-nav');
+    const sgpaCalculator = document.getElementById('sgpa-calculator');
+    const cgpaCalculator = document.getElementById('cgpa-calculator');
+
+    sgpaNav.addEventListener('click', function() {
+        sgpaNav.classList.add('active');
+        cgpaNav.classList.remove('active');
+        sgpaCalculator.style.display = 'grid';
+        cgpaCalculator.style.display = 'none';
+    });
+
+    cgpaNav.addEventListener('click', function() {
+        cgpaNav.classList.add('active');
+        sgpaNav.classList.remove('active');
+        cgpaCalculator.style.display = 'grid';
+        sgpaCalculator.style.display = 'none';
+    });
+
+    // CGPA Calculator functionality
+    const semestersContainer = document.getElementById('semesters-container');
+    const addSemesterBtn = document.getElementById('add-semester');
+    const calculateFinalCgpaBtn = document.getElementById('calculate-final-cgpa');
+    const clearAllSemestersBtn = document.getElementById('clear-all-semesters');
+    let semesterCount = 1;
+
+    // Add new semester row
+    function addSemesterRow() {
+        semesterCount++;
+        const semesterRow = document.createElement('div');
+        semesterRow.className = 'semester-row';
+        semesterRow.innerHTML = `
+            <input type="text" class="semester-name" placeholder="Semester Name (e.g., ${semesterCount}st Semester)">
+            <input type="number" class="semester-sgpa" placeholder="SGPA" min="0" max="10" step="0.01">
+            <button type="button" class="remove-semester">Remove</button>
+        `;
+        semestersContainer.appendChild(semesterRow);
+        
+        // Add event listener for remove button
+        const removeBtn = semesterRow.querySelector('.remove-semester');
+        removeBtn.addEventListener('click', function() {
+            semesterRow.remove();
+            semesterCount--;
+            updateSemesterNumbers();
+        });
+    }
+
+    // Update semester numbers in placeholders
+    function updateSemesterNumbers() {
+        const semesterRows = document.querySelectorAll('.semester-row');
+        semesterRows.forEach((row, index) => {
+            const input = row.querySelector('.semester-name');
+            const suffix = getSuffix(index + 1);
+            input.placeholder = `Semester Name (e.g., ${index + 1}${suffix} Semester)`;
+        });
+    }
+
+    // Get ordinal suffix for numbers
+    function getSuffix(number) {
+        if (number % 10 === 1 && number % 100 !== 11) return 'st';
+        if (number % 10 === 2 && number % 100 !== 12) return 'nd';
+        if (number % 10 === 3 && number % 100 !== 13) return 'rd';
+        return 'th';
+    }
+
+    // Calculate final CGPA
+    function calculateFinalCGPA() {
+        const semesterRows = document.querySelectorAll('#cgpa-calculator .semester-row');
+        let totalSGPA = 0;
+        let validSemesters = [];
+        let hasError = false;
+
+        // Validation
+        semesterRows.forEach((row, index) => {
+            const semesterName = row.querySelector('.semester-name').value.trim();
+            const sgpa = parseFloat(row.querySelector('.semester-sgpa').value);
+
+            if (!semesterName) {
+                showMessage(`Please enter name for Semester ${index + 1}`, 'error', true);
+                hasError = true;
+                return;
+            }
+
+            if (isNaN(sgpa) || sgpa < 0 || sgpa > 10) {
+                showMessage(`Please enter valid SGPA (0-10) for ${semesterName}`, 'error', true);
+                hasError = true;
+                return;
+            }
+
+            validSemesters.push({
+                name: semesterName,
+                sgpa: sgpa
+            });
+            totalSGPA += sgpa;
+        });
+
+        if (hasError) return;
+
+        if (validSemesters.length === 0) {
+            showMessage('Please add at least one semester!', 'error', true);
+            return;
+        }
+
+        // Calculate CGPA
+        const cgpa = totalSGPA / validSemesters.length;
+        const percentage = (cgpa / 10) * 100;
+
+        // Update results display
+        document.getElementById('total-semesters').textContent = validSemesters.length;
+        document.getElementById('final-cgpa-value').textContent = cgpa.toFixed(2);
+        document.getElementById('final-percentage-value').textContent = percentage.toFixed(2) + '%';
+
+        // Update semester table
+        const tableBody = document.getElementById('semester-table-body');
+        tableBody.innerHTML = '';
+
+        validSemesters.forEach(semester => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${semester.name}</td>
+                <td>${semester.sgpa.toFixed(2)}</td>
+                <td>${(1 / validSemesters.length).toFixed(2)}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+
+        showMessage('CGPA calculated successfully!', 'success', true);
+    }
+
+    // Clear all semesters
+    function clearAllSemesters() {
+        if (confirm('Are you sure you want to clear all semesters?')) {
+            semestersContainer.innerHTML = `
+                <div class="semester-row">
+                    <input type="text" class="semester-name" placeholder="Semester Name (e.g., 1st Semester)">
+                    <input type="number" class="semester-sgpa" placeholder="SGPA" min="0" max="10" step="0.01">
+                    <button type="button" class="remove-semester">Remove</button>
+                </div>
+            `;
+            
+            document.getElementById('total-semesters').textContent = '0';
+            document.getElementById('final-cgpa-value').textContent = '0.00';
+            document.getElementById('final-percentage-value').textContent = '0.00%';
+            document.getElementById('semester-table-body').innerHTML = '';
+            
+            semesterCount = 1;
+            showMessage('All semesters cleared!', 'success', true);
+        }
+    }
+
+    // Event listeners for CGPA calculator
+    addSemesterBtn.addEventListener('click', addSemesterRow);
+    calculateFinalCgpaBtn.addEventListener('click', calculateFinalCGPA);
+    clearAllSemestersBtn.addEventListener('click', clearAllSemesters);
+
+    // Download SGPA/CGPA Marksheet
+    const downloadSgpaBtn = document.getElementById('download-marksheet');
+    const downloadCgpaBtn = document.getElementById('download-cgpa-marksheet');
+
+    downloadSgpaBtn.addEventListener('click', () => {
+        downloadMarksheet('sgpa');
+    });
+
+    downloadCgpaBtn.addEventListener('click', () => {
+        downloadMarksheet('cgpa');
+    });
+
+    function downloadMarksheet(type) {
+        const studentName = document.getElementById(type === 'sgpa' ? 'student-name' : 'cgpa-student-name').value.trim();
+        const studentUSN = document.getElementById(type === 'sgpa' ? 'student-usn' : 'cgpa-student-usn').value.trim();
+
         if (!studentName || !studentUSN) {
             alert('Please enter your Name and USN before downloading the certificate.');
             return;
         }
-        // Collect marksheet data
-        const subjects = [];
-        document.querySelectorAll('.subject-row').forEach(row => {
-            const name = row.querySelector('.subject-name').value.trim();
-            const grade = row.querySelector('.grade-select').value;
-            const gradeLetterVal = gradeLetter[grade] || '';
-            const credits = row.querySelector('.credits').value;
-            if (name && grade && credits) {
-                subjects.push({ name, grade: gradeLetterVal, credits, points: (gradePoints[grade] * credits).toFixed(2) });
-            }
-        });
-        const totalCredits = document.getElementById('total-credits').textContent;
-        const totalPoints = document.getElementById('total-points').textContent;
-        const cgpa = document.getElementById('cgpa-value').textContent;
-        const percentage = document.getElementById('percentage-value').textContent;
 
-        // Generate PDF report card style
-        if (window.jsPDF) {
-            const doc = new window.jsPDF('p', 'mm', 'a4');
-            // Header bar
+        if (window.jspdf) {
+            const doc = new window.jspdf.jsPDF('p', 'mm', 'a4');
+            
+            // Header
             doc.setFillColor(210, 230, 245);
             doc.rect(0, 0, 210, 30, 'F');
             doc.setFontSize(24);
             doc.setTextColor(33, 87, 138);
             doc.setFont('helvetica', 'bold');
-            doc.text('REPORT CARD', 15, 18);
-            doc.setFontSize(14);
-            doc.setTextColor(80, 80, 80);
-            doc.setFont('helvetica', 'normal');
-            doc.text('SGPA Calculator', 15, 26);
-
-            // Student details
+            doc.text(type === 'sgpa' ? 'SGPA REPORT CARD' : 'CGPA REPORT CARD', 15, 18);
+            
+            // Student Details
             doc.setFontSize(12);
-            doc.setTextColor(33, 87, 138);
-            doc.setFont('helvetica', 'bold');
-            doc.text('Student', 15, 40);
-            doc.text('USN', 15, 48);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(60, 60, 60);
-            doc.text(': ' + studentName, 40, 40);
-            doc.text(': ' + studentUSN, 40, 48);
-
-            // Table header
-            let startY = 60;
-            doc.setFont('helvetica', 'bold');
+            doc.text('Name: ' + studentName, 15, 40);
+            doc.text('USN: ' + studentUSN, 15, 50);
+            
+            // Table Header
+            let y = 70;
             doc.setFillColor(33, 87, 138);
+            doc.rect(15, y, 180, 10, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.rect(15, startY, 180, 10, 'F');
-            doc.text('Subject', 20, startY + 7);
-            doc.text('Grade', 80, startY + 7);
-            doc.text('Credits', 120, startY + 7);
-            doc.text('Grade Points', 160, startY + 7);
-
-            // Table rows
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(44, 62, 80);
-            let rowY = startY + 15;
-            subjects.forEach((sub, idx) => {
-                doc.rect(15, rowY - 7, 180, 10);
-                doc.text(sub.name, 20, rowY);
-                doc.text(sub.grade, 80, rowY);
-                doc.text(String(sub.credits), 120, rowY);
-                doc.text(String(sub.points), 160, rowY);
-                rowY += 12;
-            });
-
-            // Summary
-            rowY += 5;
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(33, 87, 138);
-            doc.text('Total Credits: ' + totalCredits, 20, rowY);
-            doc.text('Total Grade Points: ' + totalPoints, 80, rowY);
-            doc.text('SGPA: ' + cgpa, 120, rowY);
-            doc.text('Percentage: ' + percentage, 160, rowY);
-
-            // Grading scale
-            rowY += 15;
-            doc.setFontSize(10);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(80, 80, 80);
-            doc.text('GRADING SCALE :  A = 90% -100%  B = 80% - 89%  C = 60% - 79%  D = 0% - 59%', 15, rowY);
-
-            // Comment box
-            rowY += 10;
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(33, 87, 138);
-            doc.text('Comment :', 15, rowY);
-            doc.setDrawColor(210, 230, 245);
-            doc.rect(15, rowY + 2, 180, 20);
-
+            
+            if (type === 'sgpa') {
+                // SGPA Table
+                doc.text('Subject', 20, y + 7);
+                doc.text('Grade', 80, y + 7);
+                doc.text('Credits', 120, y + 7);
+                doc.text('Points', 160, y + 7);
+                
+                // Get data
+                y += 15;
+                doc.setTextColor(0, 0, 0);
+                document.querySelectorAll('#grade-table-body tr').forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    doc.text(cells[0].textContent, 20, y);
+                    doc.text(cells[1].textContent, 80, y);
+                    doc.text(cells[2].textContent, 120, y);
+                    doc.text(cells[3].textContent, 160, y);
+                    y += 10;
+                });
+                
+                // Summary
+                y += 10;
+                doc.text('Total Credits: ' + document.getElementById('total-credits').textContent, 20, y);
+                y += 10;
+                doc.text('SGPA: ' + document.getElementById('cgpa-value').textContent, 20, y);
+                y += 10;
+                doc.text('Percentage: ' + document.getElementById('percentage-value').textContent, 20, y);
+            } else {
+                // CGPA Table
+                doc.text('Semester', 20, y + 7);
+                doc.text('SGPA', 100, y + 7);
+                doc.text('Weight', 160, y + 7);
+                
+                // Get data
+                y += 15;
+                doc.setTextColor(0, 0, 0);
+                document.querySelectorAll('#semester-table-body tr').forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    doc.text(cells[0].textContent, 20, y);
+                    doc.text(cells[1].textContent, 100, y);
+                    doc.text(cells[2].textContent, 160, y);
+                    y += 10;
+                });
+                
+                // Summary
+                y += 10;
+                doc.text('Total Semesters: ' + document.getElementById('total-semesters').textContent, 20, y);
+                y += 10;
+                doc.text('CGPA: ' + document.getElementById('final-cgpa-value').textContent, 20, y);
+                y += 10;
+                doc.text('Percentage: ' + document.getElementById('final-percentage-value').textContent, 20, y);
+            }
+            
             // Footer
             doc.setFontSize(10);
-            doc.setFont('times', 'italic');
-            doc.setTextColor(100, 100, 100);
-            doc.text('Generated by SGPA Calculator', 105, 290, { align: 'center' });
-            doc.save(studentName + '_SGPA_ReportCard.pdf');
+            doc.setFont('helvetica', 'italic');
+            doc.text('Generated by SGPA/CGPA Calculator', 105, 280, { align: 'center' });
+            
+            // Download
+            doc.save(`${studentName}_${type.toUpperCase()}_Report.pdf`);
         } else {
-            // Fallback: download as text file
-            let marksheet = 'SGPA Report Card\n\n';
-            marksheet += 'Name: ' + studentName + '\n';
-            marksheet += 'USN: ' + studentUSN + '\n\n';
-            marksheet += 'Subject\tGrade\tCredits\tGrade Points\n';
-            subjects.forEach(sub => {
-                marksheet += `${sub.name}\t${sub.grade}\t${sub.credits}\t${sub.points}\n`;
-            });
-            marksheet += '\nTotal Credits: ' + totalCredits;
-            marksheet += '\nTotal Grade Points: ' + totalPoints;
-            marksheet += '\nSGPA: ' + cgpa;
-            marksheet += '\nPercentage: ' + percentage;
-            marksheet += '\nGRADING SCALE :  A = 90% -100%  B = 80% - 89%  C = 60% - 79%  D = 0% - 59%';
-            marksheet += '\nComment :';
-            const blob = new Blob([marksheet], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = studentName + '_SGPA_ReportCard.txt';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            alert('PDF generation is not available. Please try again later.');
+        }
+    }
+
+    // Add keyboard shortcuts for CGPA calculator
+    document.addEventListener('keydown', function(e) {
+        if (cgpaCalculator.style.display !== 'none') {
+            if (e.ctrlKey && e.key === 'Enter') {
+                calculateFinalCGPA();
+            }
+            if (e.ctrlKey && e.key === 'n') {
+                e.preventDefault();
+                addSemesterRow();
+            }
         }
     });
+
+    // Auto-calculate on Enter key in SGPA field
+    document.addEventListener('keydown', function(e) {
+        if (e.target.classList.contains('semester-sgpa') && e.key === 'Enter') {
+            calculateFinalCGPA();
+        }
+    });
+
+    // Function to show message (modified to support both calculators)
+    function showMessage(text, type, isCgpa = false) {
+        // Remove existing messages
+        clearMessages(isCgpa);
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = type === 'error' ? 'error-message' : 'success-message';
+        messageDiv.textContent = text;
+        
+        const inputSection = document.querySelector(isCgpa ? '#cgpa-calculator .input-section' : '#sgpa-calculator .input-section');
+        inputSection.insertBefore(messageDiv, inputSection.firstChild);
+        
+        if (type === 'success') {
+            setTimeout(() => {
+                if (messageDiv.parentElement) {
+                    messageDiv.remove();
+                }
+            }, 3000);
+        }
+    }
+
+    // Clear all messages (modified to support both calculators)
+    function clearMessages(isCgpa = false) {
+        const selector = isCgpa ? '#cgpa-calculator .error-message, #cgpa-calculator .success-message' : 
+                                '#sgpa-calculator .error-message, #sgpa-calculator .success-message';
+        const messages = document.querySelectorAll(selector);
+        messages.forEach(message => message.remove());
+    }
+
+    // Download button setup is now handled in HTML
     const subjectsContainer = document.getElementById('subjects-container');
     const addSubjectBtn = document.getElementById('add-subject');
     const calculateBtn = document.getElementById('calculate-cgpa');

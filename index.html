@@ -3,18 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SGPA Calculator</title>
+    <title>SGPA/CGPA Calculator</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
+    <!-- Welcome Overlay -->
+    <div class="welcome-overlay" id="welcome-overlay">
+        <div class="welcome-form">
+            <h2>Welcome to SGPA/CGPA Calculator</h2>
+            <div class="form-group">
+                <input type="text" id="welcome-name" placeholder="Enter Your Name" required>
+                <input type="text" id="welcome-usn" placeholder="Enter Your USN" required>
+                <button id="welcome-submit">Get Started</button>
+            </div>
+        </div>
+    </div>
     <div class="container">
-        <h1>SGPA Calculator</h1>
-        <div class="calculator">
-            <div class="input-section">
+        <h1>SGPA/CGPA Calculator</h1>
+        <div class="calculator-nav">
+            <button class="nav-btn active" id="sgpa-nav">SGPA Calculator</button>
+            <button class="nav-btn" id="cgpa-nav">CGPA Calculator</button>
+        </div>
+        
+        <!-- SGPA Calculator Section -->
+        <div class="calculator" id="sgpa-calculator">
+            <div class="container-card">
                 <h2>Enter Your Details</h2>
-                <div class="user-details" style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center;">
-                    <input type="text" id="student-name" class="student-name" placeholder="Your Name" style="padding: 12px; border-radius: 8px; border: 2px solid #e1e5e9; font-size: 14px; min-width: 180px;">
-                    <input type="text" id="student-usn" class="student-usn" placeholder="USN" style="padding: 12px; border-radius: 8px; border: 2px solid #e1e5e9; font-size: 14px; min-width: 120px;">
+                <div class="user-details">
+                    <input type="text" id="student-name" class="student-name" placeholder="Your Name">
+                    <input type="text" id="student-usn" class="student-usn" placeholder="USN">
                 </div>
                 <div id="subjects-container">
                     <div class="subject-row">
@@ -37,44 +55,100 @@
                 <button type="button" id="add-subject">Add Subject</button>
                 <button type="button" id="calculate-cgpa">Calculate CGPA</button>
                 <button type="button" id="clear-all">Clear All</button>
+                
+                <div class="results-container">
+                    <h2>Results</h2>
+                    <div class="result-card">
+                        <div class="result-item">
+                            <span class="label">Total Credits:</span>
+                            <span id="total-credits">0</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Total Grade Points:</span>
+                            <span id="total-points">0</span>
+                        </div>
+                        <div class="result-item cgpa-result">
+                            <span class="label">SGPA:</span>
+                            <span id="cgpa-value">0.00</span>
+                        </div>
+                        <div class="result-item">
+                            <span class="label">Percentage:</span>
+                            <span id="percentage-value">0.00%</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grade-table">
+                        <h3>Subject Details</h3>
+                        <table id="grade-table">
+                            <thead>
+                                <tr>
+                                    <th>Subject</th>
+                                    <th>Grade</th>
+                                    <th>Credits</th>
+                                    <th>Grade Points</th>
+                                </tr>
+                            </thead>
+                            <tbody id="grade-table-body">
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="download-marksheet">Download Marksheet</button>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- CGPA Calculator Section -->
+    <div class="calculator" id="cgpa-calculator" style="display: none;">
+        <div class="container-card">
+            <h2>Enter Semester Details</h2>
+            <div class="user-details">
+                <input type="text" id="cgpa-student-name" class="student-name" placeholder="Your Name">
+                <input type="text" id="cgpa-student-usn" class="student-usn" placeholder="USN">
+            </div>
+            <div id="semesters-container">
+                <div class="semester-row">
+                    <input type="text" class="semester-name" placeholder="Semester Name (e.g., 1st Semester)">
+                    <input type="number" class="semester-sgpa" placeholder="SGPA" min="0" max="10" step="0.01">
+                    <button type="button" class="remove-semester">Remove</button>
+                </div>
+            </div>
+            <button type="button" id="add-semester">Add Semester</button>
+            <button type="button" id="calculate-final-cgpa">Calculate CGPA</button>
+            <button type="button" id="clear-all-semesters">Clear All</button>
             
-            <div class="result-section">
+            <div class="results-container">
                 <h2>Results</h2>
                 <div class="result-card">
                     <div class="result-item">
-                        <span class="label">Total Credits:</span>
-                        <span id="total-credits">0</span>
-                    </div>
-                    <div class="result-item">
-                        <span class="label">Total Grade Points:</span>
-                        <span id="total-points">0</span>
+                        <span class="label">Total Semesters:</span>
+                        <span id="total-semesters">0</span>
                     </div>
                     <div class="result-item cgpa-result">
-                        <span class="label">SGPA:</span>
-                        <span id="cgpa-value">0.00</span>
+                        <span class="label">CGPA:</span>
+                        <span id="final-cgpa-value">0.00</span>
                     </div>
                     <div class="result-item">
                         <span class="label">Percentage:</span>
-                        <span id="percentage-value">0.00%</span>
+                        <span id="final-percentage-value">0.00%</span>
                     </div>
                 </div>
                 
                 <div class="grade-table">
-                    <h3>Subject Details</h3>
-                    <table id="grade-table">
+                    <h3>Semester Details</h3>
+                    <table id="semester-table">
                         <thead>
                             <tr>
-                                <th>Subject</th>
-                                <th>Grade</th>
-                                <th>Credits</th>
-                                <th>Grade Points</th>
+                                <th>Semester</th>
+                                <th>SGPA</th>
+                                <th>Weight</th>
                             </tr>
                         </thead>
-                        <tbody id="grade-table-body">
+                        <tbody id="semester-table-body">
                         </tbody>
                     </table>
                 </div>
+                <button id="download-cgpa-marksheet">Download Marksheet</button>
             </div>
         </div>
     </div>

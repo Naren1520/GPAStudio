@@ -6,17 +6,212 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #ca5eb8 0%, #ed345c 100%);
+    background: white;
     min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Welcome Overlay Styles */
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+}
+
+.welcome-overlay.hidden {
+    display: none;
+}
+
+.welcome-form {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.welcome-form h2 {
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group input {
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-group button:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.welcome-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    -webkit-backdrop-filter: blur(5px);
+    backdrop-filter: blur(5px);
+    transition: opacity 0.3s ease;
+}
+
+.welcome-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.welcome-form {
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    max-width: 90%;
+    width: 400px;
+}
+
+.welcome-form h2 {
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group input {
+    padding: 15px;
+    border: 2px solid #e1e5e9;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-group button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-group button:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.top-nav {
+    display: flex;
+    align-items: center;
     padding: 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e1e5e9;
+}
+
+.nav-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #e1e5e9;
+    color: #333;
+    text-decoration: none;
+    margin-right: 15px;
+}
+
+.nav-btn.active {
+    background: #667eea;
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+.user-info {
+    margin-left: auto;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+}
+
+.student-info {
+    font-size: 14px;
+    color: #555;
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    border: 1px solid #e1e5e9;
 }
 
 .container {
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
     background: white;
-    border-radius: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -30,16 +225,28 @@ h1 {
 }
 
 .calculator {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    padding: 30px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.input-section, .result-section {
+.container-card {
+    background: #f8f9fa;
+    padding: 25px;
+    width: 100%;
+    margin: 0;
+}
+
+.input-section {
     background: #f8f9fa;
     padding: 25px;
     border-radius: 15px;
+    width: 100%;
+}
+
+.results-container {
+    margin-top: 20px;
+    width: 100%;
 }
 
 h2 {
@@ -49,12 +256,90 @@ h2 {
     text-align: center;
 }
 
-.subject-row {
+.subject-row, .semester-row {
     display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr auto;
     gap: 10px;
     margin-bottom: 15px;
     align-items: center;
+}
+
+.subject-row {
+    grid-template-columns: 2fr 1.5fr 1fr auto;
+}
+
+.semester-row {
+    grid-template-columns: 2fr 1fr auto;
+}
+
+.subject-row input, .semester-row input {
+    padding: 12px;
+    border: 2px solid #e1e5e9;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.subject-name, .semester-name {
+    min-width: 180px;
+}
+
+.credits, .semester-sgpa {
+    min-width: 100px;
+}
+
+.subject-row input:focus, .semester-row input:focus {
+    border-color: #667eea;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* CGPA Calculator specific styles */
+#add-subject, #add-semester, 
+#calculate-cgpa, #calculate-final-cgpa, 
+#clear-all, #clear-all-semesters {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 5px;
+    transition: all 0.3s ease;
+    width: calc(100% - 10px);
+}
+
+#add-subject:hover, #add-semester:hover,
+#calculate-cgpa:hover, #calculate-final-cgpa:hover {
+    background: #5a67d8;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+#clear-all, #clear-all-semesters {
+    background: #e74c3c;
+}
+
+#clear-all:hover, #clear-all-semesters:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(231, 76, 60, 0.3);
+}
+
+.remove-subject, .remove-semester {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 12px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background 0.3s ease;
+}
+
+.remove-subject:hover, .remove-semester:hover {
+    background: #c0392b;
 }
 
 .subject-name, .grade-select, .credits {
@@ -200,7 +485,22 @@ tr:hover {
     gap: 10px;
     margin-bottom: 20px;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.user-details input {
+    border-radius: 8px;
+    border: 2px solid #e1e5e9;
+    font-size: 14px;
+}
+
+.user-details .student-name {
+    min-width: 180px;
+}
+
+.user-details .student-usn {
+    min-width: 120px;
 }
 .student-name, .student-usn {
     padding: 12px;
@@ -221,7 +521,7 @@ tr:hover {
         justify-content: center;
     }
     
-    .subject-row {
+    .subject-row, .semester-row {
         grid-template-columns: 1fr;
         gap: 10px;
         display: flex;
@@ -365,7 +665,59 @@ tr:hover {
     }
 }
 
-/* Animation for adding subjects */
+/* Calculator Navigation */
+.calculator-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.nav-btn {
+    background: #e1e5e9;
+    color: #333;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.nav-btn.active {
+    background: #667eea;
+    color: white;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nav-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Download button styles */
+#download-marksheet, #download-cgpa-marksheet {
+    background: #28a745 !important;
+    color: white;
+    border: none;
+    padding: 15px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 10px 5px;
+    width: calc(100% - 10px);
+    transition: all 0.3s ease;
+}
+
+#download-marksheet:hover, #download-cgpa-marksheet:hover {
+    background: #218838 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+}
+
+/* Animation for adding subjects and semesters */
 .subject-row {
     animation: slideIn 0.3s ease-in;
 }
