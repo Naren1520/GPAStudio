@@ -1,4 +1,4 @@
-// CGPA Calculator JavaScript
+// CGPA Calculator
 
 document.addEventListener('DOMContentLoaded', function() {
     // Welcome overlay functionality
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('profile-name').textContent = name;
         document.getElementById('profile-usn').textContent = usn;
 
-        // Hide overlay with animation
+        // Hide overlay 
         welcomeOverlay.style.opacity = '0';
         setTimeout(() => {
             welcomeOverlay.classList.add('hidden');
@@ -750,6 +750,8 @@ document.addEventListener('DOMContentLoaded', function() {
     clearAllBtn.addEventListener('click', clearAll);
     // Setup initial remove button
     setupRemoveButtons();
+
+    
     // Add keyboard shortcuts
     document.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.key === 'Enter') {
@@ -760,6 +762,8 @@ document.addEventListener('DOMContentLoaded', function() {
             addSubjectRow();
         }
     });
+
+
     // Auto-calculate on Enter key in credits field
     document.addEventListener('keydown', function(e) {
         if (e.target.classList.contains('credits') && e.key === 'Enter') {

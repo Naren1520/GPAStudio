@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: white;
+    background: rgb(251, 250, 250);
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -63,13 +63,13 @@ body {
 }
 
 .form-group input:focus {
-    border-color: #667eea;
+    border-color: #cf2dca;
     outline: none;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group button {
-    background: #667eea;
+    background: #681957;
     color: white;
     border: none;
     padding: 15px;
@@ -81,7 +81,7 @@ body {
 }
 
 .form-group button:hover {
-    background: #5a67d8;
+    background: #b018a0;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -137,13 +137,13 @@ body {
 }
 
 .form-group input:focus {
-    border-color: #667eea;
+    border-color: #be1fbb;
     outline: none;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group button {
-    background: #667eea;
+    background: #a21ea0;
     color: white;
     border: none;
     padding: 15px;
@@ -155,7 +155,7 @@ body {
 }
 
 .form-group button:hover {
-    background: #5a67d8;
+    background: #cc17c0;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -177,15 +177,15 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     background: #e1e5e9;
-    color: #333;
+    color: #141414;
     text-decoration: none;
     margin-right: 15px;
 }
 
 .nav-btn.active {
-    background: #667eea;
+    background: #da16d7;
     color: white;
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 5px 15px rgba(197, 45, 194, 0.3);
 }
 
 .nav-btn:hover {
@@ -216,7 +216,7 @@ body {
 }
 
 .header {
-    background: linear-gradient(135deg, #e3b914 0%, #d02d17 100%);
+    background: linear-gradient(135deg, #aa10d1 0%, #c70cc4 100%);
     padding: 20px;
     display: flex;
     justify-content: space-between;
@@ -225,7 +225,7 @@ body {
 }
 
 h1 {
-    color: white;
+    color: rgb(252, 253, 252);
     font-size: 2.5rem;
     margin: 0;
 }
@@ -285,7 +285,7 @@ h1 {
     color: #333;
     margin: 0 0 15px 0;
     padding-bottom: 10px;
-    border-bottom: 2px solid #667eea;
+    border-bottom: 2px solid #cf32c5;
 }
 
 .info-item {
@@ -293,7 +293,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
     padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1.2px solid #eee;
 }
 
 .info-item .label {
@@ -302,7 +302,7 @@ h1 {
 }
 
 .info-item .value {
-    color: #667eea;
+    color: #c81cbc;
 }
 
 .editable-field {
@@ -328,7 +328,7 @@ h1 {
 }
 
 .edit-btn svg {
-    fill: #667eea;
+    fill: #c115bb;
 }
 
 .editing .value {
@@ -337,7 +337,7 @@ h1 {
 
 .editing input {
     padding: 4px 8px;
-    border: 2px solid #667eea;
+    border: 2px solid #e62ae2;
     border-radius: 4px;
     font-size: 14px;
     width: 150px;
@@ -363,7 +363,7 @@ h1 {
 }
 
 .editing .save-btn {
-    background: #667eea;
+    background: #b70d92;
     color: white;
 }
 
@@ -464,7 +464,7 @@ h2 {
 }
 
 .subject-row input:focus, .semester-row input:focus {
-    border-color: #667eea;
+    border-color: #cb18c2;
     outline: none;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
@@ -473,7 +473,7 @@ h2 {
 #add-subject, #add-semester, 
 #calculate-cgpa, #calculate-final-cgpa, 
 #clear-all, #clear-all-semesters {
-    background: #667eea;
+    background: #b607b3;
     color: white;
     border: none;
     padding: 15px 25px;
@@ -488,7 +488,7 @@ h2 {
 
 #add-subject:hover, #add-semester:hover,
 #calculate-cgpa:hover, #calculate-final-cgpa:hover {
-    background: #5a67d8;
+    background: #c715b5;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -528,7 +528,7 @@ h2 {
 
 .subject-name:focus, .grade-select:focus, .credits:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #d61cbd;
     box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -548,7 +548,7 @@ h2 {
 }
 
 #add-subject, #calculate-cgpa, #clear-all {
-    background: #667eea;
+    background: #d510c8;
     color: white;
     border: none;
     padding: 15px 25px;
@@ -561,7 +561,7 @@ h2 {
 }
 
 #add-subject:hover, #calculate-cgpa:hover {
-    background: #5a67d8;
+    background: #ac12d2;
     transform: translateY(-2px);
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
@@ -602,8 +602,8 @@ h2 {
 .cgpa-result {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #667eea;
-    border: 2px solid #667eea;
+    color: #d617d3;
+    border: 2px solid #7d06a4;
     border-radius: 10px;
     padding: 15px;
 }
@@ -615,7 +615,7 @@ h2 {
 
 #cgpa-value {
     font-size: 2rem;
-    color: #667eea;
+    color: #cb1cc8;
 }
 
 .grade-table {
@@ -655,6 +655,8 @@ tr:hover {
 }
 
 /* Responsive Design */
+
+
 /* User Details Styles */
 .user-details {
     display: flex;
@@ -724,7 +726,7 @@ tr:hover {
         box-shadow: none;
     }
 
-    /* Make all input fields and buttons consistent width */
+    /* Making all input fields and buttons consistent width */
     .subject-name, 
     .grade-select, 
     .credits,
@@ -757,7 +759,6 @@ tr:hover {
         border-radius: 8px;
     }
 
-    /* Remove center alignment from rows */
     .subject-row > *,
     .semester-row > * {
         margin: 0;
@@ -796,7 +797,6 @@ tr:hover {
         font-size: 1.1rem;
     }
 
-    /* Ensure containers take full width */
     #subjects-container,
     #semesters-container {
         width: 100%;
@@ -890,7 +890,7 @@ tr:hover {
 }
 
 .nav-btn.active {
-    background: #667eea;
+    background: #bb18a8;
     color: white;
     box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
 }
