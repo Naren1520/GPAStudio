@@ -230,6 +230,16 @@ h1 {
     margin: 0;
 }
 
+.byline {
+    display: inline-block;
+    font-size: 0.5rem; /* very tiny text */
+    color: rgba(255,255,255,0.9);
+    font-weight: 400;
+    margin-left: 8px;
+    vertical-align: baseline;
+    opacity: 0.95;
+}
+
 .profile-section {
     position: relative;
 }
@@ -707,6 +717,10 @@ tr:hover {
     h1 {
         font-size: 2rem;
         padding: 20px;
+    }
+
+    .byline {
+        font-size: 0.6rem;
     }
     
     .container {
